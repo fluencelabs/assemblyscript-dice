@@ -1,0 +1,16 @@
+{
+  "name": "assemblyscript-helloworld",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --validate --optimize --use abort=''",
+    "asbuild": "npm run asbuild:optimized"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "assemblyscript": "github:AssemblyScript/assemblyscript"
+  }
+}
