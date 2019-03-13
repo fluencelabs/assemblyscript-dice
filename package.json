@@ -5,12 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --validate --optimize --use abort=''",
+    "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --use abort=''",
     "asbuild": "npm run asbuild:optimized"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "assemblyscript": "github:AssemblyScript/assemblyscript"
+  },
+  "dependencies": {
+    "bignum": "github:MaxGraey/bignum.wasm",
+    "assemblyscript-bson": "github:nearprotocol/assemblyscript-bson",
+    "typescript-collections": "github:fluencelabs/typescript-collections",
+    "crypto-ts": "github:hmoog/crypto-ts"
   }
 }
