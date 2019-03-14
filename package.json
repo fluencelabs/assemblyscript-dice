@@ -4,19 +4,38 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --use abort=''",
-    "asbuild": "npm run asbuild:optimized"
+    "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --use abort='' --sourceMap --validate",
+    "asbuild": "npm run asbuild:optimized",
+    "asbuild:test": "npm run asbuild:test:roundtrip",
+    "asbuild:test:roundtrip": "npx asc tests/assembly/roundtrip.spec.as.ts -b tests/build/roundtrip.wasm -t tests/build/roundtrip.wat --validate --sourceMap --importMemory",
+    "test": "npm run asbuild:test && ava -v --serial"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "assemblyscript": "github:AssemblyScript/assemblyscript"
+    "@types/node": "^10.12.3",
+    "assemblyscript": "AssemblyScript/assemblyscript",
+    "ava": "1.0.0-rc.1",
+    "ts-node": "^7.0.1",
+    "typedoc": "^0.13.0",
+    "typescript": "^3.1.6"
   },
   "dependencies": {
     "bignum": "github:MaxGraey/bignum.wasm",
-    "assemblyscript-bson": "github:nearprotocol/assemblyscript-bson",
+    "assemblyscript-json": "github:nearprotocol/assemblyscript-json",
     "typescript-collections": "github:fluencelabs/typescript-collections",
     "crypto-ts": "github:hmoog/crypto-ts"
+  },
+  "ava": {
+    "compileEnhancements": true,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register/transpile-only"
+    ],
+    "files": [
+      "tests/**/*.spec.ts"
+    ]
   }
 }
