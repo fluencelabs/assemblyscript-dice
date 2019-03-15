@@ -1,9 +1,25 @@
 import {JSONDecoder, JSONHandler} from "../node_modules/assemblyscript-json/assembly/decoder";
 
-export abstract class Request {}
+export abstract class Request {
+    public action: string = "";
+}
 
-export class UnknownRequest extends Request {}
-export class JoinRequest extends Request {}
+export class UnknownRequest extends Request {
+    public message: string;
+
+    constructor(message: string) {
+        super();
+        this.action = "unknown";
+        this.message = message;
+    }
+
+}
+export class JoinRequest extends Request {
+    constructor() {
+        super();
+        this.action = "Join";
+    }
+}
 export class RollRequest extends Request {
     public readonly playerId: u64;
     public betPlacement: u8;
@@ -13,6 +29,7 @@ export class RollRequest extends Request {
         this.playerId = playerId;
         this.betPlacement = betPlacement;
         this.betSize = betSize;
+        this.action = "Roll";
     }
 }
 export class GetBalanceRequest extends Request {
@@ -20,6 +37,7 @@ export class GetBalanceRequest extends Request {
     constructor(playerId: u64) {
         super();
         this.playerId = playerId;
+        this.action = "GetBalance";
     }
 }
 
@@ -31,6 +49,10 @@ export function decode(bytes: Uint8Array): Request {
 
     let action = jsonHandler.action;
 
+    if (!action) {
+        return new UnknownRequest("'action' field is not specified.")
+    }
+
     if (action === "Join") {
         return new JoinRequest();
     } else if (action === "Roll") {
@@ -38,7 +60,7 @@ export function decode(bytes: Uint8Array): Request {
     } else if (action === "GetBalance") {
         return new GetBalanceRequest(jsonHandler.playerId)
     } else {
-        return new UnknownRequest();
+        return new UnknownRequest("There is no request with action: " + action);
     }
 }
 
