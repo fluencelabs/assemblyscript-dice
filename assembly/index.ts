@@ -35,5 +35,7 @@ export function invoke(ptr: i32, size: i32): i32 {
       store<u8>(strAddr + i, b);
     }
 
+    memory.free(ptr);
+
     return addr;
 }

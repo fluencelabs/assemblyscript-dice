@@ -16,10 +16,9 @@ export function handler(requestBytes: Uint8Array): string {
     } else if (request instanceof GetBalanceRequest) {
         return gameManager.getBalance(request.playerId).serialize();
     } else if (request instanceof UnknownRequest) {
-        return new ErrorResponse("").serialize();
+        return new ErrorResponse("There is no such type of request.").serialize();
     } else {
-
+        unreachable();
+        return "";
     }
-
-    return "";
 }

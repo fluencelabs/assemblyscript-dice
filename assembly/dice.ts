@@ -67,6 +67,9 @@ export class GameManager {
     }
 
     getBalance(playerId: u64): Response {
-        return new GetBalanceResponse(1);
+        if (!this.playerBalance.has(playerId)) {
+            return new ErrorResponse("There is no player with id: " + playerId.toString());
+        }
+        return new GetBalanceResponse(this.playerBalance.get(playerId));
     }
 }
