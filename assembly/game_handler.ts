@@ -23,6 +23,6 @@ export function handler(requestBytes: Uint8Array): string {
         return error.serialize();
     }
 
-    let response = new ErrorResponse("Unereachable.");
+    let response = new ErrorResponse("Unreachable.");
     return response.serialize();
 }

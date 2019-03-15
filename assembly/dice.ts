@@ -12,13 +12,9 @@ const DICE_LINE_COUNT: u8 = 6;
 export class GameManager {
 
     registeredPlayers: u64 = 0;
-    playerIds: u64[] = [];
+    playerIds: u64[] = new Array(PLAYERS_MAX_COUNT);
     playerBalance: Map<u64, u64> = new Map<u64, u64>();
     encoder: JSONEncoder = new JSONEncoder();
-
-    constructor() {
-        NativeMath.seedRandom(SEED);
-    }
 
     join(): string {
         // delete the oldest player, if maximum players reach
@@ -28,6 +24,7 @@ export class GameManager {
         }
 
         this.playerIds.push(this.registeredPlayers);
+
         this.playerBalance.set(this.registeredPlayers, INIT_ACCOUNT_BALANCE);
 
         let response = new JoinResponse(this.registeredPlayers);
@@ -56,7 +53,7 @@ export class GameManager {
             return error.serialize();
         }
 
-        let outcome = ((NativeMath.random() * 10000000) % DICE_LINE_COUNT + 1) as u8;
+        let outcome = ((Math.random() * 10000000) % DICE_LINE_COUNT + 1) as u8;
 
         let newBalance: u64 = 0;
 

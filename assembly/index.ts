@@ -1,4 +1,4 @@
-// import "allocator/tlsf";
+import "allocator/tlsf";
 //import "allocator/buddy";
 //import "allocator/arena";
 
