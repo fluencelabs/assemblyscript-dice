@@ -9,14 +9,17 @@ export function handler(requestBytes: Uint8Array): string {
 
     let request: Request = decode(requestBytes);
 
-    if (request instanceof JoinRequest) {
+    if (request.action === "Join") {
         return gameManager.join().serialize();
-    } else if (request instanceof RollRequest) {
-        return gameManager.roll(request.playerId, request.betPlacement, request.betSize).serialize();
-    } else if (request instanceof GetBalanceRequest) {
-        return gameManager.getBalance(request.playerId).serialize();
-    } else if (request instanceof UnknownRequest) {
-        return new ErrorResponse(request.message).serialize();
+    } else if (request.action === "Roll") {
+        let r = request as RollRequest;
+        return gameManager.roll(r.playerId, r.betPlacement, r.betSize).serialize();
+    } else if (request.action === "GetBalance") {
+        let r = request as GetBalanceRequest;
+        return gameManager.getBalance(r.playerId).serialize();
+    } else if (request.action === "unknown") {
+        let r = request as UnknownRequest;
+        return (new ErrorResponse(r.message)).serialize();
     }
 
     let response = new ErrorResponse("Unereachable: " + request.action);

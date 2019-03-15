@@ -26,7 +26,7 @@ export class RollResponse extends Response {
     public outcome: u8;
     public playerBalance: u64;
 
-    constructor(outcome: u64, playerBalance: u8) {
+    constructor(outcome: u8, playerBalance: u64) {
         super();
         this.outcome = outcome;
         this.playerBalance = playerBalance;

@@ -1,7 +1,7 @@
 import {JSONEncoder} from "../node_modules/assemblyscript-json/assembly/encoder";
 import {ErrorResponse, GetBalanceResponse, JoinResponse, Response, RollResponse} from "./response";
 
-const PLAYERS_MAX_COUNT: usize = 1024;
+const PLAYERS_MAX_COUNT: i32 = 1024;
 const SEED: u64 = 12345678;
 // the account balance of new players
 const INIT_ACCOUNT_BALANCE: u64 = 100;
