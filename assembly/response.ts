@@ -35,8 +35,8 @@ export class RollResponse extends Response {
     serialize(): string {
         let encoder = new JSONEncoder();
         encoder.setString("action", "Roll");
-        encoder.setInteger("outcome", this.outcome as i32);
-        encoder.setInteger("playerBalance", this.playerBalance as i32);
+        encoder.setInteger("outcome", this.outcome as i64);
+        encoder.setInteger("player_balance", this.playerBalance as i64);
 
         return encoder.toString();
     }

@@ -1,7 +1,15 @@
 import {JSONDecoder, JSONHandler} from "../node_modules/assemblyscript-json/assembly/decoder";
 
+export enum Action {
+    Roll = 1,
+    Join = 2,
+    GetBalance = 3,
+    Unknown = 4,
+    Error = 5
+}
+
 export abstract class Request {
-    public action: string = "";
+    public action: Action = null;
 }
 
 export class UnknownRequest extends Request {
@@ -9,7 +17,7 @@ export class UnknownRequest extends Request {
 
     constructor(message: string) {
         super();
-        this.action = "unknown";
+        this.action = Action.Unknown;
         this.message = message;
     }
 
@@ -17,7 +25,7 @@ export class UnknownRequest extends Request {
 export class JoinRequest extends Request {
     constructor() {
         super();
-        this.action = "Join";
+        this.action = Action.Join;
     }
 }
 export class RollRequest extends Request {
@@ -29,7 +37,7 @@ export class RollRequest extends Request {
         this.playerId = playerId;
         this.betPlacement = betPlacement;
         this.betSize = betSize;
-        this.action = "Roll";
+        this.action = Action.Roll;
     }
 }
 export class GetBalanceRequest extends Request {
@@ -37,7 +45,7 @@ export class GetBalanceRequest extends Request {
     constructor(playerId: u64) {
         super();
         this.playerId = playerId;
-        this.action = "GetBalance";
+        this.action = Action.GetBalance;
     }
 }
 
@@ -53,11 +61,11 @@ export function decode(bytes: Uint8Array): Request {
         return new UnknownRequest("'action' field is not specified.")
     }
 
-    if (action === "Join") {
+    if (action == "Join") {
         return new JoinRequest();
-    } else if (action === "Roll") {
+    } else if (action == "Roll") {
         return new RollRequest(jsonHandler.playerId, jsonHandler.betPlacement, jsonHandler.betSize)
-    } else if (action === "GetBalance") {
+    } else if (action == "GetBalance") {
         return new GetBalanceRequest(jsonHandler.playerId)
     } else {
         return new UnknownRequest("There is no request with action: " + action);
@@ -74,7 +82,7 @@ class RequestJSONEventsHandler extends JSONHandler {
     public playerBalance: u64;
 
     setString(name: string, value: string): void {
-        if (name === "action") {
+        if (name == "action") {
             this.action = value;
         }
         // json scheme is not strict, so we won't throw an error on excess fields
@@ -82,15 +90,15 @@ class RequestJSONEventsHandler extends JSONHandler {
 
     setInteger(name: string, value: i64): void {
 
-        if (name == "playerId") {
+        if (name == "player_id") {
             this.playerId = value as u64;
-        } else if (name === "betPlacement") {
+        } else if (name == "bet_placement") {
             this.betPlacement = value as u8;
-        } else if (name === "betSize") {
+        } else if (name == "bet_size") {
             this.betSize = value as u32;
-        } else if (name === "outcome") {
+        } else if (name == "outcome") {
             this.outcome = value as u8;
-        } else if (name === "playerBalance") {
+        } else if (name == "player_balance") {
             this.playerBalance = value as u64;
         }
 

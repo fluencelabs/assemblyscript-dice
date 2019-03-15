@@ -1,4 +1,4 @@
-import {decode, GetBalanceRequest, JoinRequest, Request, RollRequest, UnknownRequest} from "./request";
+import {Action, decode, GetBalanceRequest, Request, RollRequest, UnknownRequest} from "./request";
 import {ErrorResponse} from "./response";
 import {GameManager} from "./dice";
 
@@ -9,19 +9,20 @@ export function handler(requestBytes: Uint8Array): string {
 
     let request: Request = decode(requestBytes);
 
-    if (request.action === "Join") {
-        return gameManager.join().serialize();
-    } else if (request.action === "Roll") {
+    if (request.action == Action.Join) {
+        return gameManager.join();
+    } else if (request.action == Action.Roll) {
         let r = request as RollRequest;
-        return gameManager.roll(r.playerId, r.betPlacement, r.betSize).serialize();
-    } else if (request.action === "GetBalance") {
+        return gameManager.roll(r.playerId, r.betPlacement, r.betSize);
+    } else if (request.action == Action.GetBalance) {
         let r = request as GetBalanceRequest;
-        return gameManager.getBalance(r.playerId).serialize();
-    } else if (request.action === "unknown") {
+        return gameManager.getBalance(r.playerId);
+    } else if (request.action == Action.Unknown) {
         let r = request as UnknownRequest;
-        return (new ErrorResponse(r.message)).serialize();
+        let error = new ErrorResponse(r.message);
+        return error.serialize();
     }
 
-    let response = new ErrorResponse("Unereachable: " + request.action);
+    let response = new ErrorResponse("Unereachable.");
     return response.serialize();
 }

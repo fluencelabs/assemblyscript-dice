@@ -8,7 +8,11 @@ declare function logF64(val: f64): void;
 export class SomeTest {
 
     static shouldHandleEmptyObject(): bool {
-        return this.roundripTest("{\"test\": \"heloooooooooooooooooo\"}");
+        this.roundripTest("{\"action\": \"Join\"}");
+        this.roundripTest("{\"action\": \"Roll\", \"player_id\": 0, \"bet_placement\": 1, \"bet_size\": 10}");
+        this.roundripTest("{\"action\": \"Roll\", \"player_id\": 0, \"bet_placement\": 1, \"bet_size\": 10}");
+        this.roundripTest("{\"action\": \"Roll\", \"player_id\": 0, \"bet_placement\": 1, \"bet_size\": 10}");
+        return this.roundripTest("{\"action\": \"Roll\", \"player_id\": 1, \"bet_placement\": 1, \"bet_size\": 10}");
     }
 
     private static roundripTest(jsonString: string): bool {
