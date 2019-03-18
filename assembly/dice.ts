@@ -16,6 +16,10 @@ export class GameManager {
     playerBalance: Map<u64, u64> = new Map<u64, u64>();
     encoder: JSONEncoder = new JSONEncoder();
 
+    constructor() {
+        NativeMath.seedRandom(SEED);
+    }
+
     join(): string {
         // delete the oldest player, if maximum players reach
         if (this.playerIds.length >= PLAYERS_MAX_COUNT) {
@@ -53,7 +57,7 @@ export class GameManager {
             return error.serialize();
         }
 
-        let outcome = ((Math.random() * 10000000) % DICE_LINE_COUNT + 1) as u8;
+        let outcome = ((Math.random() * 1000000) % DICE_LINE_COUNT + 1) as u8;
 
         let newBalance: u64 = 0;
 
