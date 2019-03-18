@@ -1,4 +1,4 @@
-import "allocator/arena";
+import "allocator/buddy";
 
 import { invoke } from "../../assembly/index";
 
@@ -26,14 +26,10 @@ export class SomeTest {
 
         for (let i = 3; i >= 0; i--) {
             let b = load<u8>(resultPtr + i) as i32;
-            logF64(b);
             resultLength = resultLength + b << i * 8;
         }
 
-        logF64(resultLength);
         logStr("result: " + String.fromUTF8(resultPtr + 4, resultLength));
-
-
 
         return true;
     }

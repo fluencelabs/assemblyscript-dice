@@ -12,7 +12,7 @@ const DICE_LINE_COUNT: u8 = 6;
 export class GameManager {
 
     registeredPlayers: u64 = 0;
-    playerIds: u64[] = new Array(PLAYERS_MAX_COUNT);
+    playerIds: u64[] = new Array();
     playerBalance: Map<u64, u64> = new Map<u64, u64>();
     encoder: JSONEncoder = new JSONEncoder();
 
@@ -33,7 +33,7 @@ export class GameManager {
 
         let response = new JoinResponse(this.registeredPlayers);
 
-        this.registeredPlayers += 1;
+        this.registeredPlayers = this.registeredPlayers + 1;
 
         return response.serialize();
     }
@@ -53,7 +53,7 @@ export class GameManager {
         let balance: u64 = this.playerBalance.get(playerId);
 
         if (betSize > balance) {
-            let error = new ErrorResponse(`Player hasn't enough money: player's current balance is ${balance.toString()} while the bet is ${betSize.toString()}`);
+            let error = new ErrorResponse("Player hasn't enough money: player's current balance is " + balance.toString()  + " while the bet is " + betSize.toString());
             return error.serialize();
         }
 

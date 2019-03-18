@@ -1,6 +1,6 @@
-import "allocator/tlsf";
-//import "allocator/buddy";
-//import "allocator/arena";
+// import "allocator/tlsf";
+import "allocator/buddy";
+// import "allocator/arena";
 
 import {handler} from "./game_handler";
 

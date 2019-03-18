@@ -31,7 +31,7 @@ export async function setup(testFileName: string): Promise<ExportedEntries> {
   if (!WebAssembly.validate(file)) {
     throw new Error(`WebAssembly binary "${ pathName }" file not valid!`);
   }
-  const imports = buildImports(`${ testFileName }.spec.as`, new WebAssembly.Memory({ initial: 2 }));
+  const imports = buildImports(`${ testFileName }.spec.as`, new WebAssembly.Memory({ initial: 200, maximum: 1000 }));
   const result  = await WebAssembly.instantiate(file, imports);
   return demangle<ExportedEntries>(result.instance.exports);
 }
