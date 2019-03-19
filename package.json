@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "bignum": "github:MaxGraey/bignum.wasm",
-    "assemblyscript-json": "github:nearprotocol/assemblyscript-json",
+    "assemblyscript-json": "github:fluencelabs/assemblyscript-json",
     "typescript-collections": "github:fluencelabs/typescript-collections",
     "crypto-ts": "github:hmoog/crypto-ts"
   },

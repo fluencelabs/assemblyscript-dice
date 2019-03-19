@@ -14,7 +14,6 @@ export class GameManager {
     registeredPlayers: u64 = 0;
     playerIds: u64[] = new Array();
     playerBalance: Map<u64, u64> = new Map<u64, u64>();
-    encoder: JSONEncoder = new JSONEncoder();
 
     constructor() {
         NativeMath.seedRandom(SEED);
@@ -35,7 +34,8 @@ export class GameManager {
 
         this.registeredPlayers = this.registeredPlayers + 1;
 
-        return response.serialize();
+        let resultStr = response.serialize();
+        return resultStr;
     }
 
     roll(playerId: u64, betPlacement: u8, betSize: u64): string {
@@ -67,11 +67,12 @@ export class GameManager {
             newBalance = balance - betSize;
         }
 
-        this.playerBalance.delete(playerId);
         this.playerBalance.set(playerId, newBalance);
 
         let response = new RollResponse(outcome, newBalance);
-        return response.serialize();
+        let resultStr = response.serialize();
+        memory.free(changetype<usize>(response));
+        return resultStr;
     }
 
     getBalance(playerId: u64): string {

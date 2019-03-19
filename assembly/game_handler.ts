@@ -8,6 +8,7 @@ let gameManager = new GameManager();
 export function handler(requestBytes: Uint8Array): string {
 
     let request: Request = decode(requestBytes);
+    // let request: Request = new RollRequest(0, 1, 2);
 
     if (request.action == Action.Join) {
         return gameManager.join();
@@ -20,9 +21,15 @@ export function handler(requestBytes: Uint8Array): string {
     } else if (request.action == Action.Unknown) {
         let r = request as UnknownRequest;
         let error = new ErrorResponse(r.message);
-        return error.serialize();
+        let returnStr = error.serialize();
+        memory.free(changetype<usize>(error));
+        return returnStr;
     }
 
+    memory.free(changetype<usize>(request));
+
     let response = new ErrorResponse("Unreachable.");
-    return response.serialize();
+    let returnStr = response.serialize();
+    memory.free(changetype<usize>(response));
+    return returnStr;
 }

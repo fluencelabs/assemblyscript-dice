@@ -10,6 +10,10 @@ export enum Action {
 
 export abstract class Request {
     public action: Action = null;
+
+    clear(): void {
+
+    }
 }
 
 export class UnknownRequest extends Request {
@@ -19,6 +23,11 @@ export class UnknownRequest extends Request {
         super();
         this.action = Action.Unknown;
         this.message = message;
+    }
+
+    clear(): void {
+        super.clear();
+        memory.free(changetype<usize>(this.message));
     }
 
 }
@@ -38,6 +47,11 @@ export class RollRequest extends Request {
         this.betPlacement = betPlacement;
         this.betSize = betSize;
         this.action = Action.Roll;
+    }
+
+    clear(): void {
+        super.clear();
+        memory.free(changetype<usize>(this.playerId));
     }
 }
 export class GetBalanceRequest extends Request {
@@ -61,15 +75,21 @@ export function decode(bytes: Uint8Array): Request {
         return new UnknownRequest("'action' field is not specified.")
     }
 
+    let request: Request;
+
     if (action == "Join") {
-        return new JoinRequest();
+        request = new JoinRequest();
     } else if (action == "Roll") {
-        return new RollRequest(jsonHandler.playerId, jsonHandler.betPlacement, jsonHandler.betSize)
+        request = new RollRequest(jsonHandler.playerId, jsonHandler.betPlacement, jsonHandler.betSize)
     } else if (action == "GetBalance") {
-        return new GetBalanceRequest(jsonHandler.playerId)
+        request = new GetBalanceRequest(jsonHandler.playerId)
     } else {
-        return new UnknownRequest("There is no request with action: " + action);
+        request = new UnknownRequest("There is no request with action: " + action);
     }
+
+    jsonHandler.clean();
+
+    return request;
 }
 
 class RequestJSONEventsHandler extends JSONHandler {
@@ -80,6 +100,10 @@ class RequestJSONEventsHandler extends JSONHandler {
     public betSize: u32;
     public outcome: u8;
     public playerBalance: u64;
+
+    clean(): void {
+        memory.free(changetype<usize>(this.action));
+    }
 
     setString(name: string, value: string): void {
         if (name == "action") {
