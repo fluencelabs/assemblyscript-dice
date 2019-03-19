@@ -38,6 +38,8 @@ export function invoke(ptr: i32, size: i32): i32 {
 
     memory.free(changetype<usize>(result));
     memory.free(ptr);
+    memory.free(changetype<usize>(bb));
+    memory.free(changetype<usize>(bb.buffer));
 
     return addr;
 }

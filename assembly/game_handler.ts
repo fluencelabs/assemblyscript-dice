@@ -8,7 +8,6 @@ let gameManager = new GameManager();
 export function handler(requestBytes: Uint8Array): string {
 
     let request: Request = decode(requestBytes);
-    // let request: Request = new RollRequest(0, 1, 2);
 
     if (request.action == Action.Join) {
         return gameManager.join();
